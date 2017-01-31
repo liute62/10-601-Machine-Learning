@@ -15,3 +15,7 @@ The goal of this are as follows:
 * implement and apply a Two layer neural network classifier
 * understand the differences and tradeoffs between these classifiers
 * get a basic understanding of performance improvements from using higher-level representations than raw pixels (e.g. color histograms, Histogram of Gradient (HOG) features)
+
+Reference:
+
+https://github.com/zeyuanxy/course-cs231n-convolutional-neural-networks-for-visual-recognition/tree/master/assignment1/cs231n/classifiers
