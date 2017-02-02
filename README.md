@@ -19,3 +19,8 @@ The goal of this are as follows:
 Reference:
 
 https://github.com/zeyuanxy/course-cs231n-convolutional-neural-networks-for-visual-recognition/tree/master/assignment1/cs231n/classifiers
+
+
+## CMU-10-601 Assignments
+
+- [ ] Implementing Naive Bayes
