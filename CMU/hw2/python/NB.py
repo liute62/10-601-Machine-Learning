@@ -1,4 +1,3 @@
-import math
 import numpy as np
 
 
@@ -10,10 +9,7 @@ def logProd(x):
     # x - 1D numpy ndarray
     ## Outputs ##
     # log_product - float
-    product = 1
-    for num in x:
-        product *= num
-    log_product = math.log(product)
+    log_product = np.sum(x)
     return log_product
 
 
@@ -26,11 +22,23 @@ def NB_XGivenY(XTrain, yTrain, alpha, beta):
     # yTrain - 1D numpy ndarray of length V
     # alpha - float
     # beta - float
-
-    ## Outputs ##
-    # D - (2 by V) numpy ndarray
-
     D = np.zeros([2, XTrain.shape[1]])
+    total_onion = sum(yTrain)
+    total_eco = yTrain.shape[0] - total_onion
+    for words in range(0,XTrain.shape[1]):
+        onion_num = 0
+        econo_num = 0
+        for docs in range(0,XTrain.shape[0]):
+
+            if XTrain[docs][words] == 1:
+                if yTrain[docs] == 1:
+                    onion_num += 1
+                else:
+                    econo_num += 1
+        D[0][words] = (econo_num + alpha - 1) / (total_eco + alpha + beta - 2)
+        D[1][words] = (onion_num + alpha - 1) / (total_onion + alpha + beta - 2)
+
+    # D - (2 by V) numpy ndarray
     return D
 
 
@@ -42,9 +50,9 @@ def NB_YPrior(yTrain):
 
     ## Outputs ##
     # p - float
-
-    p = 0
-    return p
+    total = np.sum(yTrain) * 1.0
+    p = (yTrain.shape[0] - total) / yTrain.shape[0]
+    return p * 1.0
 
 
 # The NB_Classify function takes a matrix of MAP estimates for theta_yw,
@@ -55,12 +63,25 @@ def NB_Classify(D, p, XTest):
     # D - (2 by V) numpy ndarray
     # p - float
     # XTest - (m by V) numpy ndarray
-
     ## Outputs ##
     # yHat - 1D numpy ndarray of length m
-
-
-    yHat = np.ones(XTest.shape[0])
+    yHat = np.zeros(XTest.shape[0])
+    for index in range(0,XTest.shape[0]):
+       prod0 = np.ones(XTest.shape[1])
+       prod1 = np.ones(XTest.shape[1])
+       for words in range(0,XTest.shape[1]):
+            if XTest[index][words] == 1:
+                prod0[words] = D[0][words]
+                prod1[words] = D[1][words]
+            else:
+                prod0[words] = 1 - D[0][words]
+                prod1[words] = 1 - D[1][words]
+       p0 = logProd(np.log(prod0)) + np.log(p)
+       p1 = logProd(np.log(prod1)) + np.log(1-p)
+       if p0 >= p1:
+           yHat[index] = 0
+       else:
+           yHat[index] = 1
     return yHat
 
 
@@ -70,9 +91,12 @@ def classificationError(yHat, yTruth):
     ## Inputs ##
     # yHat - 1D numpy ndarray of length m
     # yTruth - 1D numpy ndarray of length m
-
     ## Outputs ##
     # error - float
-
-    error = 0
+    total = yHat.shape[0]
+    err = 0.0
+    for index in range(1,total):
+        if yHat[index] != yTruth[index]:
+            err += 1
+    error = err / total
     return error
