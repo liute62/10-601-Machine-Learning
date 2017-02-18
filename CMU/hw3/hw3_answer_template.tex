@@ -1,0 +1,413 @@
+\documentclass[a4paper]{article}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{paralist}
+\usepackage{epstopdf}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+\usepackage{fancyvrb}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{float}
+\usepackage{paralist}
+\usepackage[svgname]{xcolor}
+\usepackage{enumerate}
+\usepackage{array}
+\usepackage{times}
+\usepackage{url}
+\usepackage{fancyhdr}
+\usepackage{comment}
+\usepackage{environ}
+\usepackage{times}
+\usepackage{textcomp}
+\usepackage{caption}
+
+\sloppy
+
+
+
+\urlstyle{rm}
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[]
+\newtheorem{conjecture}{Conjecture}[]
+\newtheorem{example}{Example}[]
+\newtheorem{theorem}{Theorem}[]
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+
+\floatname{algorithm}{Procedure}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\newcommand{\abs}[1]{\lvert#1\rvert}
+\newcommand{\norm}[1]{\lVert#1\rVert}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\Nat}{\mathbb{N}}
+\newcommand{\br}[1]{\{#1\}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\renewcommand{\qedsymbol}{$\blacksquare$}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+
+\newcommand{\vc}[1]{\boldsymbol{#1}}
+\newcommand{\xv}{\vc{x}}
+\newcommand{\Sigmav}{\vc{\Sigma}}
+\newcommand{\alphav}{\vc{\alpha}}
+\newcommand{\muv}{\vc{\mu}}
+
+\def\x{\mathbf x}
+\def\y{\mathbf y}
+\def\w{\mathbf w}
+\def\v{\mathbf v}
+\def\E{\mathbb E}
+\def\V{\mathbb V}
+
+\newcommand \expect {\mathbb{E}}
+\newcommand \mle [1]{{\hat #1}^{\rm MLE}}
+\newcommand \map [1]{{\hat #1}^{\rm MAP}}
+%\newcommand \argmax {\operatorname*{argmax}}
+%\newcommand \argmin {\operatorname*{argmin}}
+\newcommand \code [1]{{\tt #1}}
+\newcommand \datacount [1]{\#\{#1\}}
+\newcommand \ind [1]{\mathbb{I}\{#1\}}
+\newcommand \bs [1]{\boldsymbol{#1}}
+
+
+% TO SHOW SOLUTIONS, include following (else comment out):
+\newenvironment{soln}{
+    \leavevmode\color{red}\ignorespaces
+}{}
+
+% TO ONLY SHOW HOMEWORK QUESTIONS, include following:
+% \NewEnviron{soln}
+ % {}
+ % {}
+
+
+
+\hypersetup{
+%    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+
+\geometry{
+  top=1in,            % <-- you want to adjust this
+  inner=1in,
+  outer=1in,
+  bottom=1in,
+  headheight=3em,       % <-- and this
+  headsep=2em,          % <-- and this
+  footskip=3em,
+}
+
+
+\pagestyle{fancyplain}
+\lhead{\fancyplain{}{Homework 3: Linear and Logistic Regression}}
+\rhead{\fancyplain{}{10-601 Introduction to Machine Learning}}
+\cfoot{\thepage}
+
+\title{\textsc{Homework 3: \\  Linear Regression and Logistic Regression}} % Title
+
+\newcommand{\outDate}{Feb 13, 2017}
+\newcommand{\dueDate}{Feb 22, 2017 5:30 pm}
+
+\author{CMU 10601: \textsc{Machine Learning (Spring 2017)} \\
+\url{https://piazza.com/cmu/spring2017/10601} \\
+OUT: \outDate{} \\
+DUE: \dueDate{} \\ 
+TAs: Daniel Bird, Sree Harsha, Abhinav Maurya, Ye Yuan} 
+
+\date{}
+
+\begin{document}
+
+\maketitle 
+
+\section*{START HERE: Instructions}
+\begin{itemize}
+
+\item \textbf{Collaboration Policy [2 pts]}: 
+Collaboration on solving the homework is allowed, after you have thought about the problems on your own. It is also OK to get clarification (but not solutions) from books or online resources, again after you have thought about the problems on your own. There are two requirements: first, cite your collaborators fully and completely (e.g., ``Jane explained to me what is asked in Question 3.4''). Second, write your solution {\em independently}: close the book and all of your notes, and send collaborators out of the room, so that the solution comes from you only.  See the collaboration policy on the website for more information: \url{http://www.cs.cmu.edu/~mgormley/courses/10601-s17/about.html}
+
+The following is worth a total of \textbf{[2 points]} to not lose these marks please complete the following questions and submit your answers in Gradescope:
+
+\begin{itemize}
+  \item Did you receive any help whatsoever from anyone in solving this assignment? Yes / No.
+  \item If you answered \emph{yes}, give full details: \rule{0.5\textwidth}{.4pt} \\(e.g. \emph{Jane explained to me what is asked in Question 3.4})
+  \item Did you give any help whatsoever to anyone in solving this assignment? Yes / No.
+  \item If you answered \emph{yes}, give full details: \rule{0.5\textwidth}{.4pt} \\(e.g. \emph{I pointed Joe to section 2.3 to help him with Question 2}).
+  \item How many hours did this assignment take: \rule{50\mm}{.4pt}
+\end{itemize}
+
+\item\textbf{Late Submission Policy:} See the late submission policy here: \url{http://www.cs.cmu.edu/~mgormley/courses/10601-s17/about.html}
+
+\item\textbf{Submitting your work:} You will use Gradescope to submit answers to all theory questions, and Autolab to submit only your code required in sections 1.2 and 2.2.
+
+\begin{itemize}
+
+% \item \textbf{QnA:} We will use an online system called QnA for short answer and multiple choice questions.  You can log in with your Andrew ID and password using the button labeled "LOGIN WITH CMU ID". (As a reminder, never enter your Andrew password into any website unless you have first checked that the URL starts with "https://" and the domain name ends in ".cmu.edu" -- but in this case it's OK since both conditions are met)  A link to the Homework 2 QnA section is provided in Problem 1 below. The deadline displayed on QnA may not correspond to the actual deadline for this homework, since we are allowing late submissions (as discussed in the late submission policy on the course site).
+
+\item \textbf{Gradescope:} For written problems such as derivations, proofs, or plots we will be using Gradescope.  You can access the site here: \url{https://gradescope.com/}. Each derivation/proof should be completed on a separate page. Submissions can be handwritten, but should be labeled and clearly legible.  If your writing is not legible, you will not be awarded marks.  Alternatively, submissions can be written in LaTeX.  Upon submission, label each question using the template provided. Regrade requests can be made, however this gives the TA to regrade your entire paper, meaning if additional mistakes are found then points will be deducted.
+
+\item \textbf{Autolab:} You can access the 10601 course on autolab by going to \url{https://autolab.andrew.cmu.edu/} All programming assignments will be graded automatically on Autolab using Octave 3.8.2 and Python 2.7. You may develop your code in your favorite IDE, but please make sure that it runs as expected on Octave 3.8.2 or Python 2.7 before submitting you should use the same language for both linear regression and logistic regression implementations. The code which you write will be executed remotely against a suite of tests, and the results are used to automatically assign you a grade. To make sure your code executes correctly on our servers, you should avoid using libraries which are not present in the basic Octave install. For Python users, you are encouraged to use the \texttt{numpy} package. The deadline displayed on Autolab may not correspond to the actual deadline for this homework, since we are allowing late submissions (as discussed in the late submission policy on the course site) Any attempt to ``hack'' Autolab or any other kind of code cheating will be dealt with according to university policy on student cheating.
+  
+\end{itemize}
+  
+\end{itemize}
+
+\vspace{0.2in}
+
+In this assignment, capital bold notation such as $\mathbf{X}$ refers to the feature matrix whose rows correspond to datapoints and columns to features. Small letter, bold notation refers to a vector e.g. $\x_i$ denotes the $i^{th}$ datapoint and $\y$ denotes the vector containing output values. Subscripts denote appropriate indices of a matrix or a vector. e.g. $y_i$ refers to $i^{th}$ element of the vector $\y$. Scalars are italicized e.g. $eta$.
+
+\section{Linear Regression [45 pts]}
+
+\subsection{Theoretical Derivation [15 pts]}
+
+In this problem, you will derive the linear regression formula from a statistical point of view. Consider the model:
+$$p(y|\x) = \mathcal{N}(y|\w^\top\x,\sigma^2)$$ where $\x$ is an example of your data (a vector of feature values), and $y$ is the target value.
+$\mathcal{N}(y|\mu,\sigma^2)$ is the Gaussian distribution with mean $\mu$ and variance $\sigma^2$.
+
+Throughout this question, we assume $\sigma$ is known.
+Suppose we have the following data independently generated from this model: $$\mathcal{D} = (\mathbf{X},\mathbf{y})$$ where $\mathbf{X} \in \mathbb{R}^{N \times K}$, the $i^{th}$ row $\mathbf{X}_{i.}$ has the features of the $i^{th}$ training sample and $\y \in \mathbb{R}^N$, $\y_i$ is the target value of the $i^{th}$ training sample. 
+
+\begin{enumerate}[(a)]
+
+\item {\bf [3 Points]} Log-likelihood Function: Please write out the log-likelihood function $\log p\left(\mathcal{D}|\w\right)$ in terms of $\mathbf{X}$, $\y$, $\w$, and $\sigma$.
+
+\begin{soln}
+Your answer here.
+\end{soln}
+
+\item {\bf [4 Points]} Maximum Likelihood Estimation: Please derive a formula for the MLE estimate $\hat \w_{mle}$ that maximizes $\log p\left(\mathcal{D}|\w\right)$ in the form of $\mathbf{X}$, $\y$.
+\vspace{0.3cm}
+
+\begin{soln}
+Your answer here.
+\end{soln}
+
+% \item {\bf [2 Points]} Deriving Posterior: Now let us approach the linear regression setup from a Bayesian perspective. Suppose we have a prior for $\w$:
+% \[
+% p(\w) = \Pi_{j=1}^d\mathcal{N}\left(w_j|0,\gamma^2\right),
+% \]i.e. each coordinate of $\w$ is independent of other coordinates and have the mean $0$ and variance $\gamma^2$.
+% Again, we assume variance $\gamma^2$ is known. Please write out the posterior probability: $p\left(\w|\mathcal{D}\right)$ in terms of $\mathbf{X}$, $y$, $\w$, $\sigma$ and $\gamma$.
+
+% \item {\bf [4 Points]} Maximum A Posteriori Estimation: Please derive a formula for the MAP estimate $\hat \w_{map}$ that maximizes the posterior. (Hint: use Bayes rule to simplify calculation.)
+
+\item {\bf [3 Points]} While the analytical MLE estimate for $\hat \w_{mle}$ that we just derived is theoretically appealing, its implementation involves an expensive linear algebraic operation related to calculating a Moore-Penrose pseudo-inverse. An alternative approach is to formulate an optimization objective corresponding to the linear regression problem and minimize it using gradient descent. To that end, show that maximizing the log-likelihood $\log p\left(\mathcal{D}|\w\right)$ is equivalent to minimizing the loss objective corresponding to mean squared error  $\mathcal{L}(\mathbf{w}) = {\frac{1}{n} ||\mathbf{X} \cdot \mathbf{w} - \mathbf{y}||_2}^2$.
+
+\begin{soln}
+Your answer here.
+\end{soln}
+
+\item {\bf [3 Points]} Derive the gradient of the above loss objective with respect to $\mathbf{w}$: $\nabla_{\mathbf{w}} \mathcal{L}(\mathbf{w})$. Also, write down the gradient descent update rule.
+
+\begin{soln}
+Your answer here.
+\end{soln}
+
+\item {\bf [2 Points]} Each batch gradient descent iteration involves calculation of the gradient involving all datapoints. To improve convergence, stochastic gradient descent is often used in practice instead of batch gradient descent. In stochastic gradient descent, each gradient update step uses gradient calculated from a single datapoint. Write the stochastic gradient update rule using the $i^{th}$ datapoint $(\x_i, y_i)$.
+
+\begin{soln}
+Your answer here.
+\end{soln}
+
+\end{enumerate}
+
+\subsection{Implementation [30 pts]}
+
+We will now implement linear regression using the stochastic gradient descent update rule we derived. You should submit all questions in this implementation section to autolab with the exception of question (h) which you should submit via gradescope. We will use the Boston housing prices dataset to predict median housing prices in Boston using your implementation. The original dataset can be found at \href{https://vincentarelbundock.github.io/Rdatasets/csv/MASS/Boston.csv}{https://vincentarelbundock.github.io/Rdatasets/csv/MASS/Boston.csv} and the data dictionary describing the dataset can be found at \href{https://vincentarelbundock.github.io/Rdatasets/doc/MASS/Boston.html}{https://vincentarelbundock.github.io/Rdatasets/doc/MASS/Boston.html}.
+
+You may implement your code either in Python or Octave using function signatures in the starter code provided in the handout. The following requirements must be present in the code:
+
+\begin{enumerate}[(a)]
+
+\item {\bf [3 Points]} %Implement a function that takes four input filepaths as strings (\code{LinReg\_XTrain.csv}, \code{LinReg\_yTrain.csv}, \code{LinReg\_XTest.csv}, and \code{LinReg\_yTest.csv}), and loads the four corresponding input CSV files: \\ 
+%\code{obj = LinReg\_ReadInputFiles(XTrainPath,yTrainPath,XTestPath,yTestPath)}
+Implement the function \code{LinReg\_ReadInputs(filepath)} function that reads the following four CSV files for Linear Regression: \begin{itemize}
+\item \code{LinReg\_XTrain.csv} should be read in as a $N \times K$ dimensional matrix describing N training examples with K features. Name this matrix as \textbf{XTrain}.
+\item\code{LinReg\_yTrain.csv} should be read in as a $N \times 1$ dimensional vector which describes the output values for training samples. Name this vector as \textbf{yTrain}.
+\item \code{LinReg\_XTest.csv} should be read in as a $n \times K$ dimensional matrix describing $n$ test examples each with $K$ features. Name this matrix as \textbf{XTest}.
+\item \code{LinReg\_yTest.csv} should be read in as a $n \times 1$ dimensional vector which describes the output values for test samples. Name this vector as \textbf{yTest}.
+\end{itemize}
+
+The function should also standardize each feature in the feature matrix to lie in the range $[0,1]$ by using the following transformation: $$\frac{x_k - \min (x_k)}{\max (x_k) - \min (x_k)}$$ Here $\min (x_k)$ denotes the minimum value of $k^{th}$ feature and $\max (x_k)$ denotes the maximum value of that feature. You need to use the same standardization formula for each feature in both the train and test dataset. Do not standardize features in train dataset and test dataset separately. Target values $y_i$ are never standardized.\\
+
+\item {\bf [2 Points]} In your previous function, insert a bias column (i.e. a column of ones) to your \textbf{XTrain} and \textbf{XTest} matrices as the first column. You should not standardize this column. \\
+
+\item {\bf [4 Points]} Implement the function \code{LinReg\_CalcObj(X, y, w)} that takes X = \textbf{XTrain/XTest}, y = \textbf{yTrain/yTest} and your weight vector \textbf{w} as inputs, and outputs the value of the loss function $\mathcal{L}(\w)= \frac{1}{n}||\mathbf{X} \cdot \mathbf{w} - \mathbf{y}||_2^2$ we want to minimize.\\
+
+\item {\bf [5 Points]} Implement the function \code{LinReg\_CalcSG(x, y, w)} that calculates and returns the stochastic gradient using a particular data point $(\x,y)$.\\
+
+\item {\bf [5 Points]} Implement the function \code{LinReg\_UpdateParams(w, g, eta)} which takes in your weight vector $\w$, the stochastic gradient $\mathbf{g}$ and a learning constant $eta$, and returns an updated weight vector $\w$. \\
+
+\item {\bf [6 Points]} Implement the stochastic gradient descent algorithm function \code{LinReg\_SGD(XTrain, yTrain, XTest, yTest)} for linear regression by making use of the functions \code{LinReg\_CalcObj, LinReg\_CalcSG, LinReg\_UpdateParams} implemented so far. Your function should have inputs \textbf{XTrain}, \textbf{yTrain}, \textbf{XTest} and \textbf{yTest} only. You should initialize your weight vector $\w$ as $w_i = 0.5$ $\forall i$. Your function should output \code{w}: the final weight vector, \code{trainLoss}: a vector of loss values on your training data calculated at every epoch, and \code{testLoss}: a vector of loss values on your test data calculated at every epoch.
+
+In SGD, each update using a single datapoint counts as an iteration and an SGD pass through the entire dataset is called an epoch. Your function should iterate through your entire dataset 100 times. Autolab will score your code for both accuracy and runtime efficiency. Hence, you should \href{https://www.cs.cornell.edu/courses/cs1112/2013fa/Exams/exam2/vectorizedCode.pdf}{vectorize} your code for runtime efficiency as much as possible.
+
+Set the gradient descent learning constant to $eta = \frac{0.5}{\sqrt(iter)}$ where $iter$ is the current gradient descent iteration. (Note: Although this is supposed to be stochastic, please do not randomize your training instances for the purpose of this assignment, since we will be evaluating your code on Autolab.)\\
+
+%\item {\bf [3 Points]} Complete the function \code{LinReg\_PredictValues(XTest,yTest,w)} which takes the matrix \textbf{XTest}, vector \textbf{yTest} and your trained weight vector \textbf{w} and tries to predict the values of yTest. This function should return the array [yPred, RMSE] where yPred is a vector of your predictions for XTest and RMSE is the root mean squared error between your predictions and the true yTest values.\\
+
+% \item {\bf [5 Points]} Write the main function \code{LinReg\_main(XTrain, yTrain, XTest, yTest)} using functions implemented so far which should output the following things:
+
+% \begin{verbatim}
+% output[element1] = [<trainLoss_epoch_1>, <trainLoss_epoch_2>, ..., 
+% <trainLoss_epoch_last>]
+% output[element2] = [<testLoss_epoch_1>, <testLoss_epoch_2>, ..., 
+% <testLoss_epoch_last>]
+% output[element3] = finalw
+% output[element4] = [<prediction_1>, <prediction_2>, ..., <prediction_last>]
+% \end{verbatim}
+
+% Please see code skeleton files in the homework handout for more details of function signature.
+
+\item {\bf [5 Points]}  Using your functions, plot the training and test losses versus the epoch. Make sure to include axis labels and a title for your plot. Report the number of epochs that are required for the algorithm to converge. Submit your answer and your graph via gradescope.
+
+\begin{soln}
+Your answer here.
+\end{soln}
+  
+\end{enumerate}
+
+
+
+\section{Logistic Regression [55 pts]}
+% You will implement a logistic regression classifier and apply it to a two-class classification problem. Your code will be autograded by a series of test scripts that run on Autolab.
+%To get started, download the handout for Homework 3 from the course website, and extract the contents of the compressed directory. 
+%In the archive, you will find one~\code{.m} file for each of the functions that you are asked to implement, along with a file called \code{HW3Data.mat} that contains the data for this problem. 
+%You can load the data into Octave by executing \code{load("HW3Data.mat")} in the Octave interpreter. 
+%Make sure not to modify any of the function headers that are provided.
+
+\subsection{Theoretical Derivation [20 pts]}
+
+\begin{enumerate}[(a)]
+
+\item {\bf [5 Points]} In logistic regression, our goal is to learn a set of parameters by maximizing the conditional log likelihood of the data. Assuming you are given a dataset with $N$ training examples and $K$ features, write down a formula for the conditional log likelihood of the training data using the feature matrix $\mathbf{X}$, the class labels $\y$, and the weight vector $\w$. This will be your objective function for gradient ascent.
+
+\begin{soln}
+Your answer here.
+\end{soln}
+
+\item {\bf [7 Points]} Compute the partial derivative of the objective function with respect to an arbitrary $w_j$, i.e.~derive $\partial f / \partial w_j$, where $f$ is the objective that you provided above. Please show all derivatives can be written in a finite sum form.
+
+\begin{soln}
+Your answer here.
+\end{soln}
+
+\item {\bf [3 Points]} Write gradient ascent update rules for logistic regression for arbitrary $w_j$.
+
+\begin{soln}
+Your answer here.
+\end{soln}
+
+\item {\bf [2 Points]} Write down the stochastic gradient ascent update using the $i^{th}$ datapoint with features $\mathbf{X_i}$ and output label $y_i$.
+
+\begin{soln}
+Your answer here.
+\end{soln}
+
+\item {\bf [3 Points]} If you train logistic regression for infinite iterations without $l_1$ or $l_2$ regularization, the weights go to infinity. What is an intuitive explanation for this phenomenon? How does regularization help correct the problem?
+
+\begin{soln}
+Your answer here.
+\end{soln}
+
+\end{enumerate}
+
+\subsection{Implementation [35 pts]}
+
+We will now implement logistic regression for binary classification using the stochastic gradient ascent update rule we derived. You should submit all questions in this implementation section to autolab with the exception of question (g) which you should submit via gradescope. We will use an ad filtering dataset to predict if an image posted online is part of an advertisement using your implementation. The original dataset can be found at \url{https://www.andrew.cmu.edu/user/amaurya/docs/10601/}\\
+
+You should implement your code in the same language you used for the linear regression implementation and use the corresponding starter code provided in the handout. The following requirements must be present in the code:
+
+\begin{enumerate}[(a)]
+
+\item {\bf [4 Points]} Implement the function \code{LogReg\_ReadInputs(filepath)} that reads the following four CSV files for Logistic Regression:
+
+\begin{itemize}
+\item \code{LogReg\_XTrain.csv} should be read in as a $N \times K$ dimensional matrix describing $N$ training examples with $K$ features. Name this matrix as \textbf{XTrain}.
+\item\code{LogReg\_yTrain.csv} should be read in as a $N \times 1$ dimensional vector which describes the binary output labels for training samples. Name this vector as \textbf{yTrain}.
+\item \code{LogReg\_XTest.csv} should be read in as a $n \times K$ dimensional matrix describing $n$ test examples with $K$ features. Name this matrix as \textbf{XTest}.
+\item \code{LogReg\_yTest.csv} should be read in as a $n \times 1$ dimensional vector which describes the binary output labels for test samples. Name this vector as \textbf{yTest}.
+\end{itemize}
+
+Add a bias column at the beginning of your feature matrices like you did with Linear Regression.
+\\
+\item {\bf [4 Points]} Implement the function \code{LogReg\_CalcObj(X, y, w)} that takes X = \textbf{XTrain/XTest}, y = \textbf{yTrain/yTest}, your weight vector \textbf{w} as inputs, and calculates the conditional log-likelihood function $\mathcal{L}(\w)$ we want to maximize.\\
+
+\item {\bf [5 Points]} Implement the function \code{LogReg\_CalcSG(x, y, w)} that calculates the stochastic gradient using a particular data point $(\x,y)$\\
+
+\item {\bf [5 Points]} Implement the function \code{LogReg\_UpdateParams(w, g, eta)} which takes in your weight vector $\w$, the stochastic gradient $\mathbf{g}$ and a learning constant $eta$ and returns an updated weight vector $\w$.\\
+
+\item {\bf [4 Points]} Complete the function \code{LogReg\_PredictLabels(X, y, w)} which takes inputs X = \textbf{XTest/XTrain}, y = \textbf{yTest/yTrain} and your trained weight vector \textbf{w} and outputs an array [yPred, errorRate] where \code{yPred} is a vector of predictions for input \code{X} and \code{errorRate} is percentage of misclassifications that your algorithm makes when comparing its predictions to the supplied output labels \code{y}.\\
+
+\item {\bf [8 Points]} Implement the gradient ascent algorithm \code{LogReg\_SGA(XTrain, yTrain, XTest, yTest)} for logistic regression by making use of the functions \code{LogReg\_CalcObj, LogReg\_CalcSG, LogReg\_UpdateParams, LogReg\_PredictLabels} implemented so far.  Your function should have inputs \textbf{XTrain}, \textbf{yTrain}, \textbf{XTest} and \textbf{yTest} only. You  should  initialize  your  weight  vector  $\w$  as $w_i= 0.5$ $\forall i$ and should output \code{w}: your final weight vector, \code{trainErrorRate}: a vector of the percentage of misclassificatons on your training data at every 200 iterations, \code{testErrorRate}: a vector of the percentage of misclassifications on your test data at every 200 iterations, and \code{yPred}: a vector of your predictions for \textbf{XTest}.
+
+Your function should iterate through your entire data set 5 times (5 epochs). Autolab will score your code for both accuracy and runtime efficiency. Hence, you should \href{https://www.cs.cornell.edu/courses/cs1112/2013fa/Exams/exam2/vectorizedCode.pdf}{vectorize} your code for runtime efficiency as much as possible.
+
+Set the gradient descent step size as $eta = \frac{0.5}{\sqrt(iter)}$ where $iter$ is the current gradient ascent iteration. (Note: Although this is supposed to be stochastic, please do not randomize your training instances for the purpose of this assignment, since we will be evaluating your code on Autolab.)\\
+
+\item {\bf [5 Points]}  Using your functions, plot the training and test percentages of misclassified points versus the stochastic gradient ascent per 200 iterations i.e. \code{trainErrorRate} and \code{testErrorRate} obtained as \code{LogReg\_SGA} output before. Make sure to include axis labels and a title for your plot. Report the number of iterations that are required for the algorithm to converge.  Submit your answer and your graph via gradescope.
+
+\begin{soln}
+Your answer here.
+\end{soln}
+
+\end{enumerate}
+
+
+\section{Submission Instructions}
+
+You will submit your code online through the CMU autolab system, which will execute it
+remotely against a suite of tests. Your grade will be automatically
+determined from the testing results. Since you get immediate feedback
+after submitting your code and you are allowed to submit as many
+different versions as you like (without any penalty), it is easy for
+you to check your code as you go. \\
+
+To get started, you can log into the autolab website
+(\url{https://autolab.andrew.cmu.edu}). From there you should see 10-601
+in your list of courses. Download the handout for Homework 3 (Options $\rightarrow$ Download handout) and extract the contents (i.e., by executing \texttt{tar -xvf hw3.tar} at the
+command line). In the archive you will find three folders. The \texttt{data} folder contains the data files for this problem. The \texttt{python} folder contains \texttt{LinReg.py} and \texttt{LogReg.py} files which contain empty function templates for each of the functions you are asked to implement. Similarly, the \texttt{octave} folder contains separate \texttt{.m} files for each of the functions that you are asked to implement.\\
+
+To finish each programming part of this problem, open the \texttt{LinReg.py}, \texttt{LogReg.py} or the function-specific \texttt{.m} template files and complete the function(s) defined inside. When you are ready to submit your solutions, you will create a new tar archive of the files you are submitting. Please create the tar archive exactly as detailed below.\\
+
+If you are submitting Python code: 
+
+\texttt{tar -cvf hw3.tar LogReg.py LinReg.py}\\
+
+If you are submitting Octave code: 
+
+\texttt{tar -cvf hw3.tar LinReg\_ReadInputs.m LinReg\_CalcObj.m LinReg\_CalcSG.m LinReg\_UpdateParams.m LinReg\_SGD.m LinReg\_main.m LogReg\_ReadInputs.m LogReg\_CalcObj.m LogReg\_CalcSG.m LogReg\_UpdatePrams.m LogReg\_PredictLabels.m LogReg\_SGA.m} \\
+
+Copying the above commands from PDF file directly might not work. You may have to type out these commands yourself as they are shown here. If you are using any other tool for creating the tar submission (e.g. on Windows OS), make sure you tar all the code files directly and not the folder which contains your code files.\\
+
+If you are working in Octave and are missing \textbf{any} of the function-specific \texttt{.m} files in your tar archive, you will receive zero points.\\
+
+We have provided all of the data for this assignment as CSV files in the \texttt{data} folder in your handout. You can load the data using the \texttt{numpy.genfromtext} function in Python or the \texttt{csvread} and \texttt{csv2cell} (\texttt{io} package) functions in Octave. However, you should not upload any data files as part of your Autolab submission. Your Autolab submission should consist only of the code files listed in the python- or octave-specific tar command above.
+
+\bibliographystyle{apalike}
+
+
+%----------------------------------------------------------------------------------------
+
+
+\end{document}

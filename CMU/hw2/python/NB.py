@@ -78,6 +78,7 @@ def NB_Classify(D, p, XTest):
                 prod1[words] = 1 - D[1][words]
        p0 = logProd(np.log(prod0)) + np.log(p)
        p1 = logProd(np.log(prod1)) + np.log(1-p)
+       print p0,p1
        if p0 >= p1:
            yHat[index] = 0
        else:

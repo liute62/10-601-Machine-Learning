@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 
 #Point to data directory here
 #By default, we are pointing to '../data/'
-alpha = 5
-belta = 2
+alpha = 0
+belta = 0
 data_dir = os.path.join('..','data')
 
 # Read vocabulary into a list
@@ -32,7 +32,7 @@ yTest = np.genfromtxt(os.path.join(data_dir, 'yTest.csv'), delimiter=',')
 D = NB.NB_XGivenY(XTrain,yTrain,alpha,belta)
 # TODO: Test NB_YPrior function, defined in NB.py
 p = NB.NB_YPrior(yTrain)
-print yTrain.shape[0]
+print yTrainSmall[0]
 print p
 # TODO: Test NB_Classify function, defined in NB.py
 yHat = NB.NB_Classify(D,p,XTest)
@@ -42,6 +42,8 @@ print error
 # TODO: Run experiments outlined in HW2 PDF
 # https://docs.scipy.org/doc/scipy-0.15.1/reference/generated/scipy.stats.beta.html
 #
+# alpha = 2
+# belta = 5
 # fig, ax = plt.subplots(1, 1)
 # mean, var, skew, kurt = beta.stats(alpha, belta, moments='mvsk')
 # r = beta.rvs(alpha, belta, size=1000)
