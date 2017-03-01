@@ -24,9 +24,6 @@ plt.imshow(datapoint.reshape((28,28), order = 'F'), cmap='gray')
 # TODO: Test perceptron_predict function, defined in perceptron.py
 
 # TODO: Test perceptron_train function, defined in perceptron.py
-w0 = np.zeros((XTrain.shape[1]))
-w = pe.perceptron_train(w0,XTrain,yTrain,100)
-print w
 
 # TODO: Test RBF_kernel function, defined in perceptron.py
 

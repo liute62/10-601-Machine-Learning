@@ -67,6 +67,13 @@ def RBF_kernel(X1, X2, sigma):
     m = 1  
     X2 = np.reshape(X2, (1, X2.shape[0]))
   K = np.zeros((n,m))
+  print X1.shape
+  print X2.shape
+  for i in range(0,X1.shape[0]):
+    for j in range(0,X2.shape[0]):
+       top = np.sum(np.power(np.subtract(X1[i],X2[j]),2))
+       bottom = 2 * sigma * sigma
+       K[i][j] = math.exp( - top / bottom )
   return K
 
 def kernel_perceptron_predict(a, XTrain, yTrain, x, sigma):
