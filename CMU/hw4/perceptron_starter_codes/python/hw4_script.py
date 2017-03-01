@@ -30,5 +30,6 @@ plt.imshow(datapoint.reshape((28,28), order = 'F'), cmap='gray')
 # TODO: Test kernel_perceptron_predict function, defined in perceptron.py
 
 # TODO: Test kernel_perceptron_train function, defined in perceptron.py
-
+a0 = np.zeros(XTrain.shape[0])
+pe.kernel_perceptron_train(a0,XTrain,yTrain,10,0.001)
 # TODO: Run experiments outlined in HW4 PDF

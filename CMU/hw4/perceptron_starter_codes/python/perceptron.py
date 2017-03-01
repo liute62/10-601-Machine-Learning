@@ -67,8 +67,6 @@ def RBF_kernel(X1, X2, sigma):
     m = 1  
     X2 = np.reshape(X2, (1, X2.shape[0]))
   K = np.zeros((n,m))
-  print X1.shape
-  print X2.shape
   for i in range(0,X1.shape[0]):
     for j in range(0,X2.shape[0]):
        top = np.sum(np.power(np.subtract(X1[i],X2[j]),2))
@@ -85,7 +83,13 @@ def kernel_perceptron_predict(a, XTrain, yTrain, x, sigma):
   #   sigma is the parameter $\sigma$ in RBF function, scalar
   # Output:
   #   the predicted label for x, scalar -1 or 1
-  return 1
+  new_y = 0
+  for r in range(0,XTrain.shape[0]):
+    # n*m, n = 1, m = d
+    new_y += a[r] * yTrain[r] * RBF_kernel(x,XTrain[r],sigma)
+  if new_y > 0:
+    return 1
+  return -1
  
 def kernel_perceptron_train(a0, XTrain, yTrain, num_epoch, sigma):
   # Input:
@@ -96,4 +100,12 @@ def kernel_perceptron_train(a0, XTrain, yTrain, num_epoch, sigma):
   #   sigma is the parameter $\sigma$ in RBF function, scalar
   # Output:
   #   the trained counting vector, (n,), 1-d array
+  a0 = a0.reshape(a0.shape[0], 1)
+  yTrain = yTrain.reshape(yTrain.shape[0], 1)
+  for epoch in range(0, num_epoch):
+    for i in range(0, yTrain.shape[0]):
+      new_y = kernel_perceptron_predict(a0, XTrain, yTrain, XTrain[i], sigma)
+      if new_y != yTrain[i][0]:
+        a0[i] = a0[i]+1
+  a0 = a0.reshape(a0.shape[0], )
   return a0
