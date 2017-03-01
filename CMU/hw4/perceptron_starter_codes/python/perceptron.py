@@ -12,7 +12,12 @@ def perceptron_predict(w, x):
   #   x is feature values for test example (d,), 1-d array
   # Output:
   #   the predicted label for x, scalar -1 or 1
-  return 1
+  w = w.reshape(w.shape[0], 1)
+  x = x.reshape(x.shape[0], 1)
+  sum = np.dot(w.transpose(),x)
+  if sum > 0:
+    return 1
+  return -1
 
 
 def perceptron_train(w0, XTrain, yTrain, num_epoch):
@@ -23,6 +28,16 @@ def perceptron_train(w0, XTrain, yTrain, num_epoch):
   #   num_epoch is the number of times to go through the data, scalar
   # Output:
   #   the trained weight vector, (d,), 1-d array
+  w0 = w0.reshape(w0.shape[0], 1)
+  yTrain = yTrain.reshape(yTrain.shape[0], 1)
+  for epoch in range(0,num_epoch):
+    for i in range(0,yTrain.shape[0]):
+      new_y = perceptron_predict(w0,XTrain[i])
+      if new_y != yTrain[i][0]:
+        tmp = np.dot(yTrain[i][0],XTrain[i]) # 1 x 1 * 1 * d
+        tmp = tmp.reshape(tmp.shape[0],1)
+        w0 = np.add(w0,tmp)
+  w0 = w0.reshape(w0.shape[0],)
   return w0
 
 
