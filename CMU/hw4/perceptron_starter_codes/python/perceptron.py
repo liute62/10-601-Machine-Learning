@@ -86,6 +86,10 @@ def kernel_perceptron_predict(a, XTrain, yTrain, x, sigma):
   new_y = 0
   for r in range(0,XTrain.shape[0]):
     # n*m, n = 1, m = d
+    if a[r] == 0:
+      continue
+    if yTrain[r] == 0:
+      continue
     new_y += a[r] * yTrain[r] * RBF_kernel(x,XTrain[r],sigma)
   if new_y > 0:
     return 1
