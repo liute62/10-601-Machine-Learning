@@ -46,6 +46,11 @@ def run_svm(X, Y, C):
     
     pos = ax1.scatter(X[:, 0][(Y==1).ravel()], X[:, 1][(Y==1).ravel()], c='red', cmap=plt.cm.Paired, label='Positive')
     neg = ax1.scatter(X[:, 0][(Y==-1).ravel()], X[:, 1][(Y==-1).ravel()], c='blue', cmap=plt.cm.Paired, label='Negative')
+    # for i in clf.support_vectors_[:, 0]:
+    #     for j in range(0,X.shape[0]):
+    #         if X[j][0] == i:
+    #             print i,j
+
     ax1.scatter(clf.support_vectors_[:, 0], clf.support_vectors_[:, 1],
                 s=200, facecolors='none', edgecolors='green', label = 'Support Vector')
     ax1.legend(loc='lower right')
