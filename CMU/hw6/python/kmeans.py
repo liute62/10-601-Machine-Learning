@@ -11,8 +11,18 @@ def update_assignments(X, C):
   #   C is the cluster centers (k, d), 2-d array
   # Output:
   #   a is the cluster assignments (n,), 1-d array
-
   a = np.zeros(X.shape[0])
+  for i in range(0,X.shape[0]):
+    point = X[i, :]
+    min_index = 0
+    min_dis = float('inf')
+    for j in range(0,C.shape[0]):
+      center = C[j,:]
+      dis = sum((point - center) ** 2)
+      if dis < min_dis:
+        min_index = j
+        min_dis = dis
+    a[i] = min_index
   return a
 
 def update_centers(X, C, a):
@@ -22,7 +32,30 @@ def update_centers(X, C, a):
   #   a is the cluster assignments (n,), 1-d array
   # Output:
   #   C is the new cluster centers (k, d), 2-d array
-
+  for i in range(0,C.shape[0]):
+    array = []
+    for j in range(0,a.shape[0]):
+      if a[j] == i:
+        point = X[j,:]
+        array.append(point)
+    if len(array) == 0:
+      continue
+    sum_array = (0,0)
+    for k in range(0,len(array)):
+      sum_array += array[k]
+    sum_array = sum_array / len(array)
+    C[i] = sum_array
+    # min_dis = float('inf')
+    # ctr = array[0]
+    # for k in range(0,len(array)):
+    #   dis = 0
+    #   for m in range(0,len(array)):
+    #     if k != m:
+    #       dis += sum((array[k] - array[m])**2)
+    #   if dis < min_dis:
+    #      min_dis = dis
+    #      ctr = array[k]
+    # C[i] = ctr
   return C
 
 
@@ -34,8 +67,18 @@ def lloyd_iteration(X, C):
   # Output:
   #   C is the cluster centers (k, d), 2-d array
   #   a is the cluster assignments (n,), 1-d array
-
   a = np.zeros(X.shape[0])
+  a = update_assignments(X, C)
+  last_obj_loss = 0
+  is_converge = False
+  while not is_converge:
+    obj_loss = kmeans_obj(X,C,a)
+    if last_obj_loss != obj_loss:
+      update_centers(X,C,a)
+      a = update_assignments(X,C)
+      last_obj_loss = obj_loss
+    else:
+      is_converge = True
   return (C, a)
 
 def kmeans_obj(X, C, a):
@@ -45,8 +88,13 @@ def kmeans_obj(X, C, a):
   #   a is the cluster assignments (n,), 1-d array
   # Output:
   #   obj is the k-means objective of the provided clustering, scalar, float
-
   obj = 0.0
+  for i in range(0,X.shape[0]):
+    point = X[i,:]
+    assigned = a[i]
+    ctr_point = C[int(assigned),:]
+    dis = sum((point - ctr_point) ** 2)
+    obj += dis
   return obj
 
 
