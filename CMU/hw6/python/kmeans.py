@@ -40,7 +40,7 @@ def update_centers(X, C, a):
         array.append(point)
     if len(array) == 0:
       continue
-    sum_array = (0,0)
+    sum_array = np.zeros(X.shape[1])
     for k in range(0,len(array)):
       sum_array += array[k]
     sum_array = sum_array / len(array)
@@ -71,14 +71,20 @@ def lloyd_iteration(X, C):
   a = update_assignments(X, C)
   last_obj_loss = 0
   is_converge = False
+  K = 0
   while not is_converge:
     obj_loss = kmeans_obj(X,C,a)
     if last_obj_loss != obj_loss:
       update_centers(X,C,a)
+      K += 1
+      # print 'update center'
+      # print C
       a = update_assignments(X,C)
       last_obj_loss = obj_loss
     else:
       is_converge = True
+  # print 'converged'
+  # print K
   return (C, a)
 
 def kmeans_obj(X, C, a):
@@ -120,6 +126,11 @@ def kmeans_cluster(X, k, init, num_restarts):
     elif init == "fixed":
       C = np.copy(X[0:k])
     else:
+      C = X[0:2].copy()
+      C[0][0] = 1.0
+      C[0][1] = 1.0
+      C[1][0] = 5.0
+      C[1][1] = 7.0
       print "No such module"
     # Run the Lloyd iteration until convergence
     (C, a) = lloyd_iteration(X, C)
