@@ -492,51 +492,32 @@ def pooling_layer_backward(output, input, layer):
   w_out = output['width']
   k = layer['k']
   input_od = np.zeros(input['data'].shape)
-  import sys
-  sys.stdout.write(str(h_out)+' '+str(w_out)+' '+str(k)+ '\n')
 
   # implementation begins
   h_in = input['height']
   w_in = input['width']
-  input_n = {
-    'height': h_in,
-    'width': w_in,
-    'channel': c,
-  }
-  offset = k * k
-  if True:
-    for n in range(batch_size):
-      input_n['data'] = input['data'][:, n]
-      diff_n = output['diff'][:, n]
-      col = im2col_conv(input_n, layer, h_out, w_out)
-      index = 0
-      input_od_n = np.zeros(col.shape[0] * col.shape[1])
-      sys.stdout.write(str(col.shape[0] * col.shape[1]) + ' ' + str(input_n.shape[0]) + ' ' + str(input_n.shape[1]) + '\n')
-      sys.stdout.write(str(col.shape[0] * col.shape[1]) + ' ' + str(diff_n.shape[0])  + '\n')
-      sys.stdout.write('start' +str(n)+'\n')
-      for i in range(0, col.shape[1]):
-        j = 0
-        while j + offset <= col.shape[0]:
-          # max_index = np.argmax(col[j:j + offset, i])
-          max_val = np.max(col[j:j + offset, i])
-          for tmp in range(j,j+offset):
-            if col[tmp,i] == max_val:
-              max_index = tmp - j
-          input_od_n[index * offset + max_index] = diff_n[index]
-          j += offset
-          index += 1
-      input_od[:,n] = input_od_n
-      sys.stdout.write('end' +str(n)+'\n')
-  # else:
-  #   for n in range(batch_size):
-  #     input_n = input['data'][:, n]
-  #     diff_n = output['diff'][:, n]
-  #     input_od_n = np.zeros(input_n.shape[0])
-  #     for i in range(0,input_n.shape[0]):
-  #       for w1 in range(0,k):
-  #         for h1 in range(0,k):
-  #
-  #     input_od[:, n] = input_od_n
+
+  stride = layer['stride']
+
+  for n in range(batch_size):
+    data = input['data'][:, n]
+    data_od = np.zeros(data.shape)
+    diff_n = output['diff'][:, n]
+    diff_index = 0
+    im = np.reshape(data, (h_in, w_in, c))
+    data_od = np.reshape(data_od, (h_in, w_in, c))
+
+    for h in range(h_out):
+      for w in range(w_out):
+        matrix_hw = im[h * stride: h * stride + k, w * stride: w * stride + k, :]
+        for c_index in range(matrix_hw.shape[2]):
+            window = matrix_hw[:,:,c_index]
+            for max_i in range(window.shape[0]):
+              for max_j in range(window.shape[1]):
+                  if window[max_i,max_j] == np.max(window):
+                     data_od[h*stride + max_i, w * stride + max_j, c_index] = diff_n[diff_index]
+            diff_index += 1
+    input_od[:, n] = data_od.flatten()
         # implementation ends
   assert np.all(input['data'].shape == input_od.shape), 'input_od has incorrect shape!'
   return input_od

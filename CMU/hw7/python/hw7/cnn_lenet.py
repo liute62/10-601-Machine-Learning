@@ -501,27 +501,62 @@ def pooling_layer_backward(output, input, layer):
     'width': w_in,
     'channel': c,
   }
-  offset = k * k
+  print 'h_in,w_in,h_out,w_out'
+  print h_in,w_in,h_out,w_out
+
+  stride = layer['stride']
+  pad = layer['pad']
+  print 'stride,pad,k'
+  print stride,pad,k
+
   for n in range(batch_size):
-    input_n['data'] = input['data'][:, n]
+    data = input['data'][:, n]
+    data_od = np.zeros(data.shape)
     diff_n = output['diff'][:, n]
-    col = im2col_conv(input_n, layer, h_out, w_out)
-    index = 0
-    input_od_n = np.zeros(col.shape[0] * col.shape[1])
-    for i in range(0, col.shape[1]):
-      j = 0
-      while j + offset <= col.shape[0]:
-        # max_index = np.argmax(col[j:j + offset, i])
-        max_val = np.max(col[j:j + offset, i])
-        for tmp in range(j,j+offset):
-          if col[tmp,i] == max_val:
-            max_index = tmp - j
-        # print index * offset + max_index, j + max_index + i * col.shape[1]
-        input_od_n[index * offset + max_index] = diff_n[index]
-        j += offset
-        index += 1
-    input_od[:,n] = input_od_n
-    # implementation ends
+    diff_index = 0
+    i = 0
+    im = np.reshape(data, (h_in, w_in, c))
+    data_od = np.reshape(data_od, (h_in, w_in, c))
+
+    for h in range(h_out):
+      for w in range(w_out):
+        matrix_hw = im[h * stride: h * stride + k, w * stride: w * stride + k, :]
+        for c_index in range(matrix_hw.shape[2]):
+            window = matrix_hw[:,:,c_index]
+            for max_i in range(window.shape[0]):
+              for max_j in range(window.shape[1]):
+                  if window[max_i,max_j] == np.max(window):
+                     data_od[h*stride + max_i, w * stride + max_j, c_index] = diff_n[diff_index]
+            diff_index += 1
+            # print data_od[h * stride: h * stride + k, w * stride: w * stride + k, c_index]
+    input_od[:, n] = data_od.flatten()
+
+  # offset = (k-stride) * (k-stride)
+  # w_size = k * k
+  # for n in range(batch_size):
+  #   input_n['data'] = input['data'][:, n]
+  #   data_od = np.zeros(input_n['data'].shape)
+  #   diff_n = output['diff'][:, n]
+  #   col = im2col_conv(input_n, layer, h_out, w_out)
+  #   for i in range(0, col.shape[1]):
+  #     j = 0
+  #     index = 0
+  #     while j + w_size <= col.shape[0]:
+  #       win_val = col[j:j + w_size, i]
+  #       print col.shape,data_od.shape,diff_n.shape
+  #       print win_val
+  #       max_val = np.max(win_val)
+  #       for tmp in range(j, j + w_size):
+  #         if col[tmp, i] == max_val:
+  #           max_index = tmp - j
+  #       print index * offset + max_index
+  #       data_od[index * offset + max_index] = diff_n[index]
+  #       index += 1
+  #       if index == 2:
+  #         print 'stop'
+  #       j += w_size
+  #   input_od[:, n] = data_od
+        # implementation ends
   assert np.all(input['data'].shape == input_od.shape), 'input_od has incorrect shape!'
   return input_od
 
@@ -658,8 +693,8 @@ def inner_product_backward(output, input, layer, param):
     # 0 - 800
     tmp_w = np.zeros(param['w'].shape)
     for j in range(0, tmp_w.shape[1]):
-      tmp_w[:, j] = np.add(tmp_w[:, j], data_n)
-      np.dot(tmp_w,diff_n)
+      for i in range(0,tmp_w.shape[0]):
+        tmp_w[i,j] = diff_n[j] * data_n[i]
 
     param_grad['w'] = np.add(param_grad['w'],tmp_w)
     param_grad['b'] = np.add(param_grad['b'],diff_n)
