@@ -2,6 +2,8 @@ import numpy as np
 import math
 import scipy.io
 import copy
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 
 ########################################################################
 #######     DO NOT MODIFY, READ ONLY IF YOU ARE INTERESTED       #######
@@ -174,6 +176,7 @@ def conv_net(params, layers, data, labels):
   output[1]['batch_size'] = layers[1]['batch_size']
   output[1]['diff'] = 0
 
+  print output[1]['data'].shape
   for i in range(2, l):
     if layers[i]['type'] == 'CONV':
       output[i] = conv_layer_forward(output[i-1], layers[i], params[i-1])
@@ -183,6 +186,26 @@ def conv_net(params, layers, data, labels):
       output[i] = inner_product_forward(output[i-1], layers[i], params[i-1])
     elif layers[i]['type'] == 'RELU':
       output[i] = relu_forward(output[i-1], layers[i])
+
+  print output[2]['data'].shape
+  image2s = output[2]['data'][:,0].reshape((24,24,20))
+  fig = plt.figure()
+  for i in range(0,image2s.shape[2]):
+    a = fig.add_subplot(2, 10, i)
+    lum_img = image2s[:, :, i]
+    imgplot = plt.imshow(lum_img,cmap='gray')
+    a.set_title('layer2_'+str(i))
+  plt.show()
+  print output[3]['data'].shape
+  image3s = output[3]['data'][:,0].reshape((12,12,20))
+  print image3s.shape
+  fig2 = plt.figure()
+  for i in range(0,image3s.shape[2]):
+    a = fig2.add_subplot(2, 10, i)
+    lum_img = image3s[:, :, i]
+    imgplot = plt.imshow(lum_img,cmap='gray')
+    a.set_title('layer3_'+str(i))
+  plt.show()
 
   i = l
   assert layers[i]['type'] == 'LOSS', 'last layer must be loss layer'

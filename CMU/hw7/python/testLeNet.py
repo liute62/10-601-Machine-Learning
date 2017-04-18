@@ -71,6 +71,7 @@ def get_lenet():
 
 def main():
   # define lenet
+  file = open('netout.txt', 'a')
   layers = get_lenet()
 
   # load data
@@ -136,6 +137,9 @@ def main():
     # print 'step ' +str(step)+' cost '+str(cp['cost']) + ' percent ' + str(cp['percent'])
     if (step+1) % display_interval == 0:
       print 'cost = %f training_percent = %f' % (cp['cost'], cp['percent'])
+      file.write('cost = %f training_percent = %f' % (cp['cost'], cp['percent'])+'\n')
+      file.close()
+      file = open('netout.txt', 'a')
 
     # display test accuracy
     if (step+1) % test_interval == 0:
@@ -143,10 +147,13 @@ def main():
       cptest, _ = cnn_lenet.conv_net(params, layers, xtest, ytest)
       layers[1]['batch_size'] = 64
       print '\ntest accuracy: %f\n' % (cptest['percent'])
+      file.write('\ntest accuracy: %f\n' % (cptest['percent']))
+      file.close()
+      file = open('netout.txt', 'a')
 
     # save params peridocally to recover from any crashes
     if (step+1) % snapshot == 0:
-      pickle_path = 'lenet.mat'
+      pickle_path = 'lenet2.mat'
       pickle_file = open(pickle_path, 'wb')
       pickle.dump(params, pickle_file)
       pickle_file.close()
