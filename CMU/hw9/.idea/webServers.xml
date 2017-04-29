@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="f721b79e-21e6-4570-9b01-be63771be076" name="remote" url="http://cloudlet015.elijah.cs.cmu.edu">
+        <fileTransfer host="cloudlet015.elijah.cs.cmu.edu" port="22" rootFolder="/home/haodong" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
