@@ -7,7 +7,7 @@ import caffe
 import copy
 import numpy as np
 import matplotlib.pyplot as plt
-
+from sklearn.decomposition import PCA
 
 class AlexNet:
 
@@ -28,25 +28,24 @@ class AlexNet:
         train_data, __ = utils.load_train_data()
         print train_data['input'].shape
         print train_data['output'].shape
-        utils.save_data_as_hdf5(const.HDF5_TRAIN_DATA_PATH,train_data)
-        utils.save_data_as_hdf5(const.HDF5_TEST_DATA_PATH,train_data)
+        utils.save_data_as_lmdb(const.LMDB_TRAIN_DATA_PATH,train_data, False, False)
         caffe.set_mode_gpu()
-        solver = caffe.get_solver(const.ALEXNET_SOLVER)
+        solver = caffe.get_solver('alexnet_solver_4.prototxt')
         solver.solve()
         pass
 
     def test(self):
         test_data, __ = utils.load_test_data()
-        utils.save_data_as_hdf5(const.HDF5_RESULT_DATA_PATH, test_data, True)
-        result = self.__get_predicted_output(const.ALEXNET_RESULT, 'alexnet/cifar3_1_iter_40000.caffemodel.h5')
+        utils.save_data_as_lmdb(const.LMDB_TEST_DATA_PATH, test_data, True)
+        result = self.__get_predicted_output('alexnet_result_4.prototxt', 'cifar3_4_iter_30000.caffemodel.h5')
         res = np.zeros(len(result), dtype=int)
         for i in xrange(len(result)):
             res[i] = (np.argmax(result[i]))
             # print res[i]
         # print len(res)
-        np.savetxt("alexnet/results.csv", res.astype(dtype=int))
+        np.savetxt("results4.csv", res.astype(dtype=int))
 
 alex = AlexNet()
 # alex.train()
 alex.test()
-print utils.compare('label.csv','alexnet/results.csv',2000)
+print utils.compare('../label.csv','results4.csv',2000)

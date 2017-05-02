@@ -9,7 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-class AlexNet:
+class NnNet:
 
     def __init__(self):
         pass
@@ -25,28 +25,28 @@ class AlexNet:
         return out[net.outputs[0]]
 
     def train(self):
-        train_data, __ = utils.load_train_data()
-        print train_data['input'].shape
-        print train_data['output'].shape
-        utils.save_data_as_hdf5(const.HDF5_TRAIN_DATA_PATH,train_data)
-        utils.save_data_as_hdf5(const.HDF5_TEST_DATA_PATH,train_data)
+        # train_data, __ = utils.load_train_data()
+        # print train_data['input'].shape
+        # print train_data['output'].shape
+        # # train_data['input'] = train_data['input'] / 255.0
+        # utils.save_data_as_lmdb('cifar_train_data_lmdb',train_data)
         caffe.set_mode_gpu()
-        solver = caffe.get_solver(const.ALEXNET_SOLVER)
+        solver = caffe.get_solver('nn_solver.prototxt')
         solver.solve()
         pass
 
     def test(self):
         test_data, __ = utils.load_test_data()
-        utils.save_data_as_hdf5(const.HDF5_RESULT_DATA_PATH, test_data, True)
-        result = self.__get_predicted_output(const.ALEXNET_RESULT, 'alexnet/cifar3_1_iter_40000.caffemodel.h5')
+        # utils.save_data_as_lmdb('cifar5_test_data_lmdb', test_data, True)
+        result = self.__get_predicted_output('alexnet_result_5.prototxt', 'cifar3_5_iter_200000.caffemodel.h5')
         res = np.zeros(len(result), dtype=int)
         for i in xrange(len(result)):
             res[i] = (np.argmax(result[i]))
             # print res[i]
         # print len(res)
-        np.savetxt("alexnet/results.csv", res.astype(dtype=int))
+        np.savetxt("results5.csv", res.astype(dtype=int))
 
-alex = AlexNet()
-# alex.train()
-alex.test()
-print utils.compare('label.csv','alexnet/results.csv',2000)
+nn = NnNet()
+nn.train()
+# alex.test()
+print utils.compare('../label.csv','results.csv',2000)
