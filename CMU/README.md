@@ -1,3 +1,5 @@
+# Notes of Machine Learning Class
+
 ## k-Nearest Neighbors
 
 ## MLE & MAP
