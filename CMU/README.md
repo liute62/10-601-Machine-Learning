@@ -20,9 +20,9 @@
 
 ## k-Means
 
-### Algorithm
+#### Algorithm
 
-### Initialization
+#### Initialization
 
 ## EM & Gaussian Mixture Model
 
@@ -57,7 +57,7 @@
 
 ## Nerual Network & CNN
 
-### Back Propagation
+#### Back Propagation
 
 ## Bayes Network
 
@@ -134,9 +134,51 @@ How do we **learn** these **conditional** and **marginal** distributions for a B
 
 #### Backward Algorithm
 
-## Matrix Factorization
+## Learning Paradigms
 
+### Matrix Factorization
 #### Alternating Least Square Error
+### Reinforcement Learning
+### Information Theory
+#### Contents
++ Information Representation
++ Information is addictive and non-negative (Conditional Information)
++ Average surprise of events.
++ Expected Surprise
++ CROSS ENTROPY 0 <= CH(p,q) = Ep[Iq(e)] <= ∞
++ The calculation of CROSS ENTROPY
++ Conditional ENTROPY & Joint ENTROPY
+
+CH(p,q) >= CH(p, p)
+
+∑Pelog(1/qe) > ∑Pelog(1/pe) 
+
+Ep[Iq] > Ep[Ip]
+
+The more accurarcy q is, the less surprised
+
+#### Conditional ENTROPY
+
+|      |  cold | mild | hot  |    |
+| low  | 1 / 6 | 4 / 6| 1 / 6| 1.0|
+| high | 2 / 4 |      |      | 1.0|
+
+H(T) + H(M) = 2.456431
+
+H(T,M) < H(T) + H(M) (The reason is the dependency inside this two events)
+
+#### Average Mutual Information
+
+I(X;Y) = H(X) - H(X/Y)
+
+if X and Y is independent, so mutual information will be zero
+
+Properties of Average Mutual Information:
+
++ Symmetric
++ Non-negative
++ Zero
++ Additive
 
 ## Learning Theory
 
