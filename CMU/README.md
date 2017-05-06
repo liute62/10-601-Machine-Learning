@@ -104,7 +104,7 @@ Variables X and Z are d-separated given a set of evidence variables E iff there 
 + Undirected graph: convert all directed edges to undirected
 + Given Removed: delete any nodes in E
 
-![alt text](https://github.com/liute62/Machine-Learning-In-Practice/CMU/Images/D-separation.png)
+![alt text](https://github.com/liute62/Machine-Learning-In-Practice/blob/master/CMU/Images/D-separation.png)
 
 ## Hidden Markov Model
 
