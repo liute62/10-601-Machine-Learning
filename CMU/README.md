@@ -20,8 +20,13 @@
 
 ## k-Means
 
+### Algorithm
+
+### Initialization
+
 ## EM & Gaussian Mixture Model
-Table.1
+
+                          Table.1 Relationship between GNB, GDA and GMM
 
 |          |Guassian Naive Bayes | Guassian Discriminative Analysis| Guassian Mixture Model |
 |:-------- |:------------------- | :-------------------------------- | :------------------- |
@@ -31,16 +36,17 @@ Table.1
 | Objective Function  | options             | object                            | Small preset option  |
 | Optimization Method | options             | object                            | Small preset option  |
 
-### EM
-Calculation Formula
+### Expectation Maximization
 
-A report Card for EM
+#### Calculation Formula
 
-Good Things
+#### A report Card for EM
 
-Bad Things
+#### Good Things
 
-Table.2
+#### Bad Things
+
+     Table.2 Comparision Between EM for GMM and EM for k-means
 
 |          |EM for Guassian Mixture Model           | EM for K-means |
 |:-------- |:------------------- | :-------------------------------- |
@@ -51,10 +57,24 @@ Table.2
 
 ## Nerual Network & CNN
 
+### Back Propagation
+
 ## Bayes Network
+
+### Evaluate Params
+
+### Conditional Dependency Analysis
 
 ## Hidden Markov Model
 
+### Forward Algorithm
+
+### Backward Algorithm
+
 ## Matrix Factorization
 
+### Alternating Least Square Error
+
 ## Learning Theory
+
+### PAC Theory
