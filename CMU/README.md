@@ -1,4 +1,4 @@
-# Notes of Machine Learning Class
+# Notes of CMU-10-601 Machine Learning Class
 
 ## k-Nearest Neighbors
 
