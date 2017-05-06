@@ -61,9 +61,9 @@
 
 ## Bayes Network
 
-### Evaluate Params
+#### Evaluate Params
 
-### Conditional Dependency Analysis
+#### Conditional Dependency Analysis
 
      Table.1 Familiar Models as Bayes Nets
 
@@ -74,13 +74,19 @@
 | Logistic Regression  | s             | 
 | 1-D Guassian  | s             | 
 
-### Independencies of a Bayes Net Model
+#### Independencies of a Bayes Net Model
 
 Cascade
 
+![alt text](https://github.com/liute62/Machine-Learning-In-Practice/blob/master/CMU/Images/Cascade.png)
+
 Common Parent
 
+![alt text](https://github.com/liute62/Machine-Learning-In-Practice/blob/master/CMU/Images/Common-Parent.png)
+
 V-Structure
+
+![alt text](https://github.com/liute62/Machine-Learning-In-Practice/blob/master/CMU/Images/V-structure.png)
 
 #### D-Separation
 
@@ -95,7 +101,7 @@ A path is "blocked" whenever:
 + ∃ Y on path s.t. Y ∈ E and Y is in a "cascade"
 + ∃ Y on path s.t. {Y, descendants(Y)} ∉ E and Y is in a "v-structure"
 
-Definition#12
+Definition#2
 
 Variables X and Z are d-separated given a set of evidence variables E iff there does not exist a path in the undirected ancestral moral graph with E removed
 
@@ -106,15 +112,27 @@ Variables X and Z are d-separated given a set of evidence variables E iff there 
 
 ![alt text](https://github.com/liute62/Machine-Learning-In-Practice/blob/master/CMU/Images/D-separation.png)
 
+#### Markov Blanket
+
+- Def: the **co-parents** of a node are the parents of its chidren
+- Def: the **Markov Blanket** of a node is the set containing the node's parents, chidren, and co-parents
+- Thm: a node is **conditionally independent** of every other node in the graph given its **Markov blanket**
+
+#### Learning Fully Observer BNs
+
+How do we **learn** these **conditional** and **marginal** distributions for a Bayes Net?
+
+![alt text](https://github.com/liute62/Machine-Learning-In-Practice/blob/master/CMU/Images/Learn-BN.png)
+
 ## Hidden Markov Model
 
-### Forward Algorithm
+#### Forward Algorithm
 
-### Backward Algorithm
+#### Backward Algorithm
 
 ## Matrix Factorization
 
-### Alternating Least Square Error
+#### Alternating Least Square Error
 
 ## Learning Theory
 
