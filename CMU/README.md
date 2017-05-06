@@ -61,7 +61,19 @@
 
 ## Bayes Network
 
-#### Evaluate Params
+#### Background
+
++ Chain Rule of Probability
+
+For random varaiables X1, X2, X3, X4:
+
+P(X1,X2,X3,X4) = P(X1|X2,X3,X4)P(X2|X3,X4)P(X3|X4)P(X4)
+
++ Conditional Independence
+
+P(A,B|C) = P(A|C)P(B|C): Random variables A and B are condionally independent given C or equivalently:
+
+P(A|B,C) = P(A|C) We write this as: A ⫫ B | C
 
 #### Conditional Dependency Analysis
 
@@ -76,17 +88,9 @@
 
 #### Independencies of a Bayes Net Model
 
-Cascade
-
-![alt text](https://github.com/liute62/Machine-Learning-In-Practice/blob/master/CMU/Images/Cascade.png)
-
-Common Parent
-
-![alt text](https://github.com/liute62/Machine-Learning-In-Practice/blob/master/CMU/Images/Common-Parent.png)
-
-V-Structure
-
-![alt text](https://github.com/liute62/Machine-Learning-In-Practice/blob/master/CMU/Images/V-structure.png)
+|  Cascade | Common Parent | V-Structure |
+|:-------- |:------------- | :-----------|
+| ![alt text](https://github.com/liute62/Machine-Learning-In-Practice/blob/master/CMU/Images/Cascade.png) | ![alt text](https://github.com/liute62/Machine-Learning-In-Practice/blob/master/CMU/Images/Common-Parent.png)|![alt text](https://github.com/liute62/Machine-Learning-In-Practice/blob/master/CMU/Images/V-structure.png) |
 
 #### D-Separation
 
