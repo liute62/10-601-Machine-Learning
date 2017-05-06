@@ -21,6 +21,31 @@
 ## k-Means
 
 ## EM & Gaussian Mixture Model
+Table.1
+
+|          |Guassian Naive Bayes | Guassian Discriminative Analysis| Guassian Mixture Model |
+|:-------- |:------------------- | :-------------------------------- | :------------------- |
+| Data   | options             | object                           | Small preset options |
+| Model  | options             | object                            | Small preset option  |
+| Decision Rule  | options             | object                            | Small preset option  |
+| Objective Function  | options             | object                            | Small preset option  |
+| Optimization Method | options             | object                            | Small preset option  |
+
+### EM
+Calculation Formula
+
+A report Card for EM
+
+Good Things
+
+Bad Things
+
+Table.2
+
+|          |EM for Guassian Mixture Model           | EM for K-means |
+|:-------- |:------------------- | :-------------------------------- |
+| Data   | options             | object                             | 
+| Model  | options             | object                            |
 
 ## PCA
 
