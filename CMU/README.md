@@ -149,9 +149,14 @@ How do we **learn** these **conditional** and **marginal** distributions for a B
 + The calculation of CROSS ENTROPY
 + Conditional ENTROPY & Joint ENTROPY
 
-CH(p,q) >= CH(p, p)
+The definition of Entropy: E[I(x)] = Eplog(1 / p(x))=−∑(x∈X) p(x)logp(x), if log2(...), the units is bit
 
-∑Pelog(1/qe) > ∑Pelog(1/pe) 
+The properties of Entropy:
++ Non-negative: H(P) >= 0
++ Invariant wrt permutation of its inputs
++ For any other probability distribution {q1,q2,...,qk}: H(P) = ∑Pelog(1/pe) < ∑Pelog(1/qe) ( CH(p,q) >= CH(p, p))
++ H(P) <= logk, with equality iff pi = 1 / k ∀¡
++ The further P is from uniform, the lower the entropy
 
 Ep[Iq] > Ep[Ip]
 
@@ -160,10 +165,18 @@ The more accurarcy q is, the less surprised
 #### Conditional ENTROPY
 
 |      |  cold | mild | hot  |    |
-| low  | 1 / 6 | 4 / 6| 1 / 6| 1.0|
-| high | 2 / 4 |      |      | 1.0|
+|:-----|:------|:-----|:-----|:---|
+| low  | 0.1 | 0.4 | 0.1 | 0.6|
+| high | 0.2 | 0.1 | 0.1 | 0.4|
+|      | 0.3 | 0.5 | 0.2 | 1.0|
+
+H(T) = H(0.3,0.5,0.2) = 1.48548
+
+H(M) = H(0.6,0.4) = 0.970951
 
 H(T) + H(M) = 2.456431
+
+H(0.1,0.4,0.1,0.2,0.1,0.1) = 2.32193
 
 H(T,M) < H(T) + H(M) (The reason is the dependency inside this two events)
 
