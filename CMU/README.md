@@ -30,30 +30,59 @@
 
 |          |Guassian Naive Bayes | Guassian Discriminative Analysis| Guassian Mixture Model |
 |:-------- |:------------------- | :-------------------------------- | :------------------- |
-| Data   | options             | object                           | Small preset options |
-| Model  | options             | object                            | Small preset option  |
-| Decision Rule  | options             | object                            | Small preset option  |
-| Objective Function  | options             | object                            | Small preset option  |
-| Optimization Method | options             | object                            | Small preset option  |
+| Data   |              |                            |  |
+| Model  |              |                             |   |
+| Decision Rule  |              |                             |   |
+| Objective Function  |              |                             |   |
+| Optimization Method |              |                             |   |
 
 ### Expectation Maximization
 
 #### Calculation Formula
++ Randomly initialize ϴ
++ Iterate until convergence:
++    E-step: Compute expected p(Zi | Xi, ϴ) using current parameters ϴ
++    M-step: Update ϴ <- argmax(ϴ') Q(ϴ'|ϴ) ϴ' is the new value
++ Each step increases Q(ϴ'|ϴ) which in turn increases L(ϴ) marginal likelihood.
 
 #### A report Card for EM
 
 #### Good Things
-
++ no learning rate (step-size) parameter
++ automatically enforces parameter constraints
++ very fast for low dimensions
++ each iteration guaranteed to improve likelihood
 #### Bad Things
++ can get stuck in local minima
++ can be slower than conjugate gradient (especially near convergence)
++ requires expensive inference step
++ is a maximum likelihood/MAP method
 
-     Table.2 Comparision Between EM for GMM and EM for k-means
+### Guassian Mixture Model
 
-|          |EM for Guassian Mixture Model           | EM for K-means |
-|:-------- |:------------------- | :-------------------------------- |
-| Data   | options             | object                             | 
-| Model  | options             | object                            |
+#### EM for GMM
++ Randomly initialize u1,...uk
++ Iterate until converge:
++    E-step Compute qj(i) = p(z(i) = j|x(i),u) (Current model's estimate of prob. that x(i) came from gaussian j)
++    M-step Update parameters to maximize Q(u'|u): uj = ( ∑ qj(i)x(i) / ∑qj ( ∑from i=1 to N) (Average of all points weighted by how likely each point came from Gaussian j)
+
+#### Connections between EM for GMM and K-Means
+
++ K-means is EM for GMM where δ^2 -> 0 and ∑= matrix[δ^2....] (diagonal is δ^2, other is zero)
++ K-means is the result of Block Coordinate Descent applied to a different objective for GMM
 
 ## PCA
+
+#### Definition
+
+PCA, Kernel PCA, ICA: Powerful unsupervised learning techniques for extracting hidden (potentially lower dimensional) structure from high dimensional datasets.
+
+Use for:
++ Visualization
++ More efficient use of resources 
++ Statistical: fewer dimensions à better generalization
++ Noise removal (improving data quality)
++ Further processing by machine learning algorithms
 
 ## Nerual Network & CNN
 
