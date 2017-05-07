@@ -128,17 +128,49 @@ How do we **learn** these **conditional** and **marginal** distributions for a B
 
 ![alt text](https://github.com/liute62/Machine-Learning-In-Practice/blob/master/CMU/Images/Learn-BN.png)
 
+#### Sampling from a Joint Distribution 
+
+For estimate the probability of distributions, but not so good, instead using Gibbs Sampling.
+
+#### Gibbs Sampling
+
+Full conditionals only need to condition on the **Markov Blanket**
+
 ## Hidden Markov Model
+
+#### Definition
+
+![alt text](https://github.com/liute62/Machine-Learning-In-Practice/blob/master/CMU/Images/HMM-define.png)
+
+1st Order Markov Assumption
+
+yt ⫫ yj | yt-1 ∀j < t - 1
+
+#### Baum-Welch Algorithm (EM for HMM)
+
+#### Three Inference Problems for HMM
+
++ Evaluation: Compute the probability of a given sequence of observations
++ Decoding:   Find the most-likely sequence of hidden states, given a sequence of observations
++ Marginals:  Compute the marginal distribution for a hidden state, given a sequence of observations
 
 #### Forward Algorithm
 
+
 #### Backward Algorithm
+
+
+#### Viterbi Algorithm
+
 
 ## Learning Paradigms
 
 ### Matrix Factorization
+
 #### Alternating Least Square Error
+
 ### Reinforcement Learning
+
 ### Information Theory
 #### Contents
 + Information Representation
@@ -182,15 +214,15 @@ H(T,M) < H(T) + H(M) (The reason is the dependency inside this two events)
 
 #### Average Mutual Information
 
-I(X;Y) = H(X) - H(X/Y)
+I(X;Y) = H(X) - H(X|Y)
 
 if X and Y is independent, so mutual information will be zero
 
 Properties of Average Mutual Information:
 
-+ Symmetric
-+ Non-negative
-+ Zero
++ Symmetric ( but H(X) ≠ H(Y) and H(X|Y) ≠ H(Y|X) )
++ Non-negative (but H(X) - H(X|y) may be negative!)
++ Zero iff X,Y independent
 + Additive
 
 ## Learning Theory
